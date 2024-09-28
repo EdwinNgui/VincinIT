@@ -8,17 +8,17 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  /*const handleLogin = async () => {
+  const handleLogin = async () => {
     try {
       // Authenticate the user
       const credentials = Realm.Credentials.emailPassword(email, password);
-      //const user = await app.logIn(credentials);
+      const user = await app.logIn(credentials);
       alert("Logged in successfully!");
       // You can handle post-login actions such as navigation here
     } catch (err) {
       setError("Error");
     }
-  };*/
+  };
 
   return (
     <View>
