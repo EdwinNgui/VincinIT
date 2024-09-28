@@ -31,6 +31,9 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "nearbyApikey":"AIzaSyC_gFI0z52xCw69ACbPfKWXOoZXUL-7MSs"
     }
   }
 }
