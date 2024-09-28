@@ -7,15 +7,15 @@ const CreateAccount = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleCreateAccount = async () => {
+  /*const handleCreateAccount = async () => {
     try {
       // Register user with email/password
-      await app.emailPasswordAuth.registerUser({ email, password });
+      //await app.emailPasswordAuth.registerUser({ email, password });
       alert("Account created successfully!");
     } catch (err) {
       setError("Error");
     }
-  };
+  };*/
 
   return (
     <View>
