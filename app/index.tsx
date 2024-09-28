@@ -13,7 +13,7 @@ export default function HomeScreen() {
   };
 
   const handleCreateAccountPress = () => {
-    Alert.alert("Create Account button pressed", "Functionality can be added here.");
+    router.push("/register")
   };
 
   return (
