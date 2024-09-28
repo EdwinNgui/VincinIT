@@ -18,3 +18,49 @@ web-build/
 
 expo-env.d.ts
 # @end expo-cli
+
+.gitignore
+Resources.md
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE Files
+*.swp
+*.sublime-project
+.vscode/
+
+# Build Artifacts
+bin/
+obj/
+*.log
+*.class
+
+# Dependency Directories
+node_modules/
+vendor/
+
+# Configuration Files
+.env
+*.local
+
+# Compiled Code
+*.exe
+*.dll
+*.out
+*.o
+
+# Temporary Files
+*.tmp
+*.bak
+*.orig
+
+# Test Data
+test-results/
+coverage/
+
+# IDE Specific
+.idea/
+.project
+.classpath
