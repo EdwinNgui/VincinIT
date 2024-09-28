@@ -26,14 +26,14 @@ export default function TabLayout() {
       <Tabs.Screen
         name="connect"
         options={{
-          title: 'Connect',
+          title: 'connect',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="index"
+        name="message"
         options={{
           title: 'Message',
           tabBarIcon: ({ color, focused }) => (

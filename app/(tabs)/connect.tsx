@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
-import { EnableConnections, DisableConnections } from '@/components/ToggleOnline';
 
 export default function TabTwoScreen() {
   const [isOnline, setIsOnline] = useState(true);
