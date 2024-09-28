@@ -8,13 +8,13 @@ const CreateAccount = () => {
   const [error, setError] = useState('');
 
   const handleCreateAccount = async () => {
-    try {
-      // Register user with email/password
-      await app.emailPasswordAuth.registerUser({ email, password });
-      alert("Account created successfully!");
-    } catch (err) {
-      setError("Error");
-    }
+    // try {
+    //   // Register user with email/password
+    //   await app.emailPasswordAuth.registerUser({ email, password });
+    //   alert("Account created successfully!");
+    // } catch (err) {
+    //   setError("Error");
+    // }
   };
 
   return (
