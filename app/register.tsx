@@ -1,18 +1,36 @@
 // RegisterScreen.js
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Button, Alert, Text } from 'react-native';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebaseConfig';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { auth, db } from '../firebaseConfig';
 import { Redirect, useRouter } from 'expo-router';
+import { doc, updateDoc } from 'firebase/firestore';
 
 const RegisterScreen = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [schoolName, setSchoolName] = useState('');
+  const [year, setYear] = useState('');
+  const [major, setMajor] = useState('');
 
   const handleRegister = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      if (auth.currentUser) {
+        await updateProfile(auth.currentUser, {
+          displayName: schoolName,
+        });
+
+        // Update additional user information in Firestore
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        await updateDoc(userDocRef, {
+          email: email,
+          schoolName: schoolName,
+          year: year,
+          major: major,
+        });
+      }
       router.push("./(tabs)/connect")
     } catch (error:any) {
       Alert.alert('Registration failed', error.message); // Updated to use error.message
@@ -38,10 +56,30 @@ const RegisterScreen = () => {
           onChangeText={setPassword}
           secureTextEntry
         />
+        <TextInput
+          style={styles.input}
+          placeholder="School Name"
+          value={schoolName}
+          onChangeText={setSchoolName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Year"
+          value={year}
+          onChangeText={setYear}
+          keyboardType="numeric"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Major"
+          value={major}
+          onChangeText={setMajor}
+        />
         <Button title="Register" onPress={handleRegister} />
       </View>
     </View>
   );
+  
 };
 
 const styles = StyleSheet.create({
