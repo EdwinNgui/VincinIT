@@ -14,7 +14,7 @@ import Constants from 'expo-constants'
 const EnableConnections = async () =>
 {
     const removeListener = addOnErrorListener((kind, message) => console.error(`${kind}: ${message}`));
-    const disconnect = await connect({apiKey:"AIzaSyC_gFI0z52xCw69ACbPfKWXOoZXUL-7MSs"});
+    const disconnect = await connect({apiKey: Constants?.expoConfig?.extra?.nearbyApikey});
     const unpublish = await publish('hello !');
     const unsubscribe = await subscribe(
     (m) => {
