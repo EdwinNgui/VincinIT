@@ -1,7 +1,6 @@
 // LoginScreen.js
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert } from 'react-native';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
 
 const LoginScreen = () => {
@@ -10,7 +9,7 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await auth.signInWithEmailAndPassword(auth, email, password);
       Alert.alert('Login successful!');
     } catch (error) {
       Alert.alert("Error");

@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'YOUR_API_KEY',
+  apiKey: 'AIzaSyCCGMBC_nSw1oTO33If4rCAFS8Z54yrTMA',
   authDomain: 'vicinit-4d1aa.firebaseapp.com',
   projectId: 'vicinit-4d1aa',
   storageBucket: 'vicinit-4d1aa.appspot.com',
