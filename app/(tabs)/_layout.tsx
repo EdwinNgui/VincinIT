@@ -15,7 +15,7 @@ export default function TabLayout() {
         headerShown: false,
       }}>
       <Tabs.Screen
-        name="profile"
+        name="index"
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, focused }) => (
@@ -35,7 +35,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="message"
         options={{
-          title: 'Messages',
+          title: 'Message',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
           ),
