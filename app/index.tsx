@@ -1,67 +1,63 @@
-import { Image, StyleSheet, Platform, Button, Alert } from 'react-native';
+import { Image, StyleSheet, Button, Alert } from 'react-native';
 import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { Redirect, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
   // Handlers for button presses
   const router = useRouter();
   const handleSignInPress = () => {
-    router.push("/login")
+    router.push("/login");
   };
 
   const handleCreateAccountPress = () => {
-    router.push("/register")
+    router.push("/register");
   };
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
+    <ThemedView style={styles.container}>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Sign In</ThemedText>
-        <HelloWave />
       </ThemedView>
 
-      {/* Step 1 - Les~ Buttons */}
+      {/* Display Logo */}
+
+      {/* Buttons with updated styles */}
       <ThemedView style={styles.buttonContainer}>
-        <Button title="Sign In" onPress={handleSignInPress} />
+        <Button title="Sign In" onPress={handleSignInPress} color="#007AFF" />
       </ThemedView>
 
       <ThemedView style={styles.buttonContainer}>
-        <Button title="Create an Account" onPress={handleCreateAccountPress} />
+        <Button title="Create an Account" onPress={handleCreateAccountPress} color="#007AFF" />
       </ThemedView>
-
-
-    </ParallaxScrollView>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center', // Center content vertically
+    alignItems: 'center', // Center content horizontally
+    backgroundColor: '#000', // Background color set to white
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+    marginBottom: 20, // Space between title and logo
   },
   reactLogo: {
     height: 178,
     width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+    marginBottom: 20, // Space between logo and buttons
   },
   buttonContainer: {
-    margin: 16, // Adds some margin around the buttons
+    width: '80%',
+    margin: 10, // Space between buttons
+    backgroundColor: '#fff', // Background stays white
+    borderRadius: 8, // Curved corners for the button containers
+    overflow: 'hidden', // Ensures buttons inside follow rounded corners
   },
 });
