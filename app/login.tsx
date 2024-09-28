@@ -1,32 +1,30 @@
+// LoginScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
-import app from '../realmConfig';
-import Realm from 'realm-web';
+import { View, TextInput, Button, Alert } from 'react-native';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
 
-const Login = () => {
+const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
   const handleLogin = async () => {
-    // try {
-    //   // Authenticate the user
-    //   const credentials = Realm.Credentials.emailPassword(email, password);
-    //   const user = await app.logIn(credentials);
-    //   alert("Logged in successfully!");
-    //   // You can handle post-login actions such as navigation here
-    // } catch (err) {
-    //   setError("Error");
-    // }
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      Alert.alert('Login successful!');
+    } catch (error) {
+      Alert.alert("Error");
+    }
   };
 
   return (
     <View>
-      <Text>Login</Text>
       <TextInput
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
       <TextInput
         placeholder="Password"
@@ -34,10 +32,9 @@ const Login = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      {error ? <Text>{error}</Text> : null}
       <Button title="Login" onPress={handleLogin} />
     </View>
-  ); 
+  );
 };
 
-export default Login;
+export default LoginScreen;

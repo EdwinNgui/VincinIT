@@ -1,29 +1,30 @@
+// RegisterScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
-import app from '../realmConfig';
+import { View, TextInput, Button, Alert } from 'react-native';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
 
-const CreateAccount = () => {
+const RegisterScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
-  const handleCreateAccount = async () => {
-    // try {
-    //   // Register user with email/password
-    //   await app.emailPasswordAuth.registerUser({ email, password });
-    //   alert("Account created successfully!");
-    // } catch (err) {
-    //   setError("Error");
-    // }
+  const handleRegister = async () => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      Alert.alert('Registration successful!');
+    } catch (error) {
+      Alert.alert("Error");
+    }
   };
 
   return (
     <View>
-      <Text>Create Account</Text>
       <TextInput
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
       <TextInput
         placeholder="Password"
@@ -31,10 +32,9 @@ const CreateAccount = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      {error ? <Text>{error}</Text> : null}
-      <Button title="Create Account" onPress={handleCreateAccount} />
+      <Button title="Register" onPress={handleRegister} />
     </View>
   );
 };
 
-export default CreateAccount;
+export default RegisterScreen;

@@ -33,7 +33,8 @@
       "typedRoutes": true
     },
     "extra": {
-      "nearbyApikey":"AIzaSyC_gFI0z52xCw69ACbPfKWXOoZXUL-7MSs"
+      "nearbyApikey":"AIzaSyC_gFI0z52xCw69ACbPfKWXOoZXUL-7MSs",
+      "firebaseApikey":"AIzaSyCCGMBC_nSw1oTO33If4rCAFS8Z54yrTMA"
     }
   }
 }
