@@ -1,7 +1,7 @@
-import { App } from '@realm/react';
+import { App } from 'realm-web';
 
 const app = new App({
-  id: "your-realm-app-id", // Your MongoDB Realm App ID
+  id: "66f85cf08f32cc1e5ad2b6ea", // Your MongoDB Realm App ID
 });
 
 export default app;

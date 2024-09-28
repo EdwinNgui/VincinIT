@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
-import app from './realmConfig';
-import Realm from 'realm';
+import app from '../realmConfig';
+import Realm from 'realm-web';
 
 const Login = () => {
   const [email, setEmail] = useState('');

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
-import app from './realmConfig';
+import app from '../realmConfig';
 
 const CreateAccount = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ const CreateAccount = () => {
       await app.emailPasswordAuth.registerUser({ email, password });
       alert("Account created successfully!");
     } catch (err) {
-      setError(err.message);
+      setError("Error");
     }
   };
 
