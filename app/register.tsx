@@ -1,6 +1,7 @@
 // RegisterScreen.js
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert } from 'react-native';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
 
 const RegisterScreen = () => {
@@ -9,10 +10,10 @@ const RegisterScreen = () => {
 
   const handleRegister = async () => {
     try {
-      await auth.createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
       Alert.alert('Registration successful!');
-    } catch (errorMessage:any) {
-      Alert.alert(errorMessage);
+    } catch (error:any) {
+      Alert.alert('Registration failed', error.message); // Updated to use error.message
     }
   };
 
