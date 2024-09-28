@@ -35,6 +35,7 @@ const LoginScreen = () => {
       <Button title="Login" onPress={handleLogin} />
     </View>
   );
+  );
 };
 
 export default LoginScreen;
