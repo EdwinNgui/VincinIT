@@ -1,5 +1,4 @@
-import { Image, StyleSheet, Button, Alert } from 'react-native';
-import { HelloWave } from '@/components/HelloWave';
+import { Image, StyleSheet, Button, Alert, Text } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useRouter } from 'expo-router';
@@ -17,19 +16,20 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Sign In</ThemedText>
-      </ThemedView>
-
-      {/* Display Logo */}
+        <Text style={styles.logo}>
+          VelocIT
+          <Text style={styles.period}>
+            .  
+          </Text>
+        </Text>
 
       {/* Buttons with updated styles */}
-      <ThemedView style={styles.buttonContainer}>
-        <Button title="Sign In" onPress={handleSignInPress} color="#007AFF" />
+      <ThemedView style={styles.registerContainer}>
+        <Button title="Register Now" onPress={handleCreateAccountPress} color="#ffffff" />
       </ThemedView>
 
-      <ThemedView style={styles.buttonContainer}>
-        <Button title="Create an Account" onPress={handleCreateAccountPress} color="#007AFF" />
+      <ThemedView style={styles.signInContainer}>
+        <Button title="Sign In" onPress={handleSignInPress} color="#666565" />
       </ThemedView>
     </ThemedView>
   );
@@ -40,13 +40,33 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center', // Center content vertically
     alignItems: 'center', // Center content horizontally
-    backgroundColor: '#000', // Background color set to white
+    backgroundColor: '#ffffff', // Background color set to white
+  },
+  period:{
+    color: "#8f179f",
   },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     marginBottom: 20, // Space between title and logo
+  },
+  signInContainer: {
+    width: '80%',
+    margin: 10, // Space between buttons
+    paddingVertical: 10,
+    backgroundColor: '#d8d6d6', // Background stays white
+    borderRadius: 15, // Curved corners for the button containers
+    overflow: 'hidden', // Ensures buttons inside follow rounded corners
+    color: '#ffffff',
+  },
+  registerContainer:{
+    width: '80%',
+    margin: 10, // Space between buttons
+    paddingVertical: 10,
+    backgroundColor: '#8f179f', // Background stays white
+    borderRadius: 15, // Curved corners for the button containers
+    overflow: 'hidden', // Ensures buttons inside follow rounded corners
   },
   reactLogo: {
     height: 178,
@@ -60,7 +80,10 @@ const styles = StyleSheet.create({
     borderRadius: 8, // Curved corners for the button containers
     overflow: 'hidden', // Ensures buttons inside follow rounded corners
   },
+  logo: {
+    alignItems: 'center',
+    fontSize: 54,
+    marginBottom: 440,
+    marginTop: 60,
+  },
 });
-
-
-//HELLO
