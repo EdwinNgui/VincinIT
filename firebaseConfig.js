@@ -1,9 +1,10 @@
 // firebaseConfig.js
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import Constants from 'expo-constants'
+import Constants from 'expo-constants';
+
 const firebaseConfig = {
-  apiKey: Constants.expoConfig.extra.firebaseApikey,
+  apiKey: Constants.expoConfig.extra.firebaseApikey, // Ensure this is set in app.json or app.config.js
   authDomain: 'vicinit-4d1aa.firebaseapp.com',
   projectId: 'vicinit-4d1aa',
   storageBucket: 'vicinit-4d1aa.appspot.com',

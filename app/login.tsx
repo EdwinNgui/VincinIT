@@ -13,7 +13,7 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("./(tabs)/login/connect")
+      router.push("./(tabs)/connect")
 
     } catch (error:any) {
       Alert.alert('Login failed', error.message); // Updated to use error.message

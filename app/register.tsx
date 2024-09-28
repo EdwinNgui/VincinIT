@@ -13,7 +13,7 @@ const RegisterScreen = () => {
   const handleRegister = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      router.push("./(tabs)/login/connect")
+      router.push("./(tabs)/connect")
     } catch (error:any) {
       Alert.alert('Registration failed', error.message); // Updated to use error.message
     }
