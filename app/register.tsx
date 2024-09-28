@@ -11,8 +11,8 @@ const RegisterScreen = () => {
     try {
       await auth.createUserWithEmailAndPassword(auth, email, password);
       Alert.alert('Registration successful!');
-    } catch (error) {
-      Alert.alert("Error");
+    } catch (errorMessage:any) {
+      Alert.alert(errorMessage);
     }
   };
 

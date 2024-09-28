@@ -11,8 +11,8 @@ const LoginScreen = () => {
     try {
       await auth.signInWithEmailAndPassword(auth, email, password);
       Alert.alert('Login successful!');
-    } catch (error) {
-      Alert.alert("Error");
+    } catch (errorMessage:any) {
+      Alert.alert(errorMessage);
     }
   };
 
