@@ -3,15 +3,17 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, Alert } from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
+import { Redirect, useRouter } from 'expo-router';
 
 const RegisterScreen = () => {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleRegister = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      Alert.alert('Registration successful!');
+      router.push("./(tabs)/login/connect")
     } catch (error:any) {
       Alert.alert('Registration failed', error.message); // Updated to use error.message
     }
