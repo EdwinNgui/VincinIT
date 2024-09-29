@@ -54,7 +54,7 @@ export default function HomeScreen() {
             {getAuth().currentUser?.displayName || 'No School Listed'}
           </Text>
         </View>
-
+        
         <View style={styles.toggleContainer}>
           <Text style={styles.toggleLabel}>Online Status:</Text>
           <Switch 
