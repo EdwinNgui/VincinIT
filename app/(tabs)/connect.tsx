@@ -5,7 +5,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import { getAuth } from 'firebase/auth';
 
-export default function TabTwoScreen() {
+export default function HomeScreen() {
   const [isOnline, setIsOnline] = useState(true);
   
   return (

@@ -22,12 +22,18 @@ export default function HomeScreen() {
             .  
           </Text>
         </Text>
+        
+      <Image
+        source={require('@/assets/images/authPageImg.png')} // Replace with your image path
+        style={styles.reactLogo}
+        resizeMode="contain" // Maintain aspect ratio
+      />
 
       {/* Buttons with updated styles */}
       <ThemedView style={styles.registerContainer}>
         <Button title="Register Now" onPress={handleCreateAccountPress} color="#ffffff" />
       </ThemedView>
-
+    
       <ThemedView style={styles.signInContainer}>
         <Button title="Sign In" onPress={handleSignInPress} color="#666565" />
       </ThemedView>
@@ -53,7 +59,8 @@ const styles = StyleSheet.create({
   },
   signInContainer: {
     width: '80%',
-    margin: 10, // Space between buttons
+    marginTop: 10, // Space between buttons
+    marginBottom: 30,
     paddingVertical: 10,
     backgroundColor: '#d8d6d6', // Background stays white
     borderRadius: 15, // Curved corners for the button containers
@@ -62,16 +69,17 @@ const styles = StyleSheet.create({
   },
   registerContainer:{
     width: '80%',
-    margin: 10, // Space between buttons
+    margin: 10,
     paddingVertical: 10,
     backgroundColor: '#8f179f', // Background stays white
     borderRadius: 15, // Curved corners for the button containers
     overflow: 'hidden', // Ensures buttons inside follow rounded corners
+    marginTop: 200,
   },
   reactLogo: {
     height: 178,
     width: 290,
-    marginBottom: 20, // Space between logo and buttons
+    marginTop: 40,
   },
   buttonContainer: {
     width: '80%',
@@ -83,7 +91,8 @@ const styles = StyleSheet.create({
   logo: {
     alignItems: 'center',
     fontSize: 54,
-    marginBottom: 440,
-    marginTop: 60,
+    marginBottom: 40,
+    fontWeight: 'bold',
+    marginTop: 80,
   },
 });
