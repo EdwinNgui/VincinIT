@@ -42,12 +42,10 @@ export default function UserProfileScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Header */}
-      <ThemedView style={styles.headerContainer}>
-        <ThemedText type="title" style={styles.appName}>
-          VelocIT
-        </ThemedText>
-      </ThemedView>
+      {/* Title inside the main container */}
+      <ThemedText type="title" style={styles.appName}>
+        VelocIT
+      </ThemedText>
 
       {/* Profile Card */}
       <ThemedView style={styles.profileCard}>
@@ -113,17 +111,16 @@ export default function UserProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     paddingBottom: 16, // To allow smooth scrolling past the last element
-  },
-  headerContainer: {
-    paddingTop: Platform.OS === 'ios' ? 44 : 24, // Adjusted gap for iPhone 12 (or similar devices)
-    paddingBottom: 10,
-    backgroundColor: '#6a0dad',
-    alignItems: 'center',
+    backgroundColor: '#6a0dad', // Full purple background matching the previous header
+    flexGrow: 1,
+    paddingTop: Platform.OS === 'ios' ? 44 : 24, // Adjust padding to make room for status bar
   },
   appName: {
     color: 'white',
     fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20 // Spacing after the title
   },
   reactLogo: {
     height: 178,
@@ -150,11 +147,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   detailsCard: {
-    backgroundColor: '#C292E6',
+    backgroundColor: '#C292E6', // Light purple background for detail cards
     borderRadius: 16,
     padding: 16,
-    marginHorizontal: 16,
-    marginVertical: 8,
+    marginHorizontal: 24,
+    marginVertical: 16,
+    
   },
   interestsTitle: {
     marginTop: 16,
