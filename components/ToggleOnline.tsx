@@ -1,51 +1,52 @@
-import React, { useMemo, useEffect } from 'react';
 import * as Location from 'expo-location';
-import Constants from 'expo-constants';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig'; // Import your Firestore configuration
-import { getAuth } from 'firebase/auth';
 
-const EnableConnections = async (firebaseUsername: any) => {
+const EnableConnections = async (firebaseUsername: string) => {
   // Request location permission
   const { status } = await Location.requestForegroundPermissionsAsync();
+  
   if (status !== 'granted') {
-    console.error('Location permission not granted');
     return;
   }
 
   // Check if location services are enabled
   const isLocationEnabled = await Location.hasServicesEnabledAsync();
+  
   if (!isLocationEnabled) {
-    console.error('Location services are not enabled');
     return;
   }
 
   // Get the user's current location
   const location = await Location.getCurrentPositionAsync({});
-  console.log(`Current location: ${location.coords.latitude}, ${location.coords.longitude}`);
+
   try {
+    // Prepare user data to store in Firestore
+    const firestoreUserData = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    };
+
+    // Set the user data in Firestore under the 'users' collection using their username
     const userDocRef = doc(db, 'users', firebaseUsername);
-    await setDoc(userDocRef, {
-      location: {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      },
-      timestamp: new Date(),
-    }, { merge: true });
-    console.log('Current location posted to Firestore successfully.');
+    await setDoc(userDocRef, firestoreUserData); // This will create a new document or overwrite if it exists
   } catch (error) {
     console.error('Error posting location to Firestore:', error);
   }
+
   return {
-    // No disconnect, unpublish, or unsubscribe needed for location
-    location, 
+    location,
   };
 };
 
-const DisableConnections = async (disconnect: any, unsubscribe: any, unpublish: any, removeListener: any) => {
+const DisableConnections = async (disconnect: any, removeListener: any) => {
   // No unpublish or unsubscribe needed for location
-  if (disconnect) await disconnect();
-  if (removeListener) removeListener(); // Call the listener removal
+  if (disconnect) {
+    await disconnect();
+  }
+  if (removeListener) {
+    removeListener(); // Call the listener removal
+  }
 };
 
 export { EnableConnections, DisableConnections };

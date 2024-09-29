@@ -1,11 +1,13 @@
 // firebaseConfig.js
-import { initializeApp} from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { initializeAuth} from 'firebase/auth';
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
-import {getFirestore } from 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
+// import { getAuth,setPersistence } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 import Constants from 'expo-constants';
-
+import { setLogLevel as setFirestoreLogLevel } from "firebase/firestore";
+import { initializeAuth} from 'firebase/auth';
+// import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// Firebase configuration
 const firebaseConfig = {
   apiKey: Constants.expoConfig.extra.firebaseApikey, // Ensure this is set in app.json or app.config.js
   authDomain: 'vicinit-4d1aa.firebaseapp.com',
@@ -15,13 +17,12 @@ const firebaseConfig = {
   appId: '1:1098386176973:ios:682d7eba12441064daa284',
 };
 
-// Initialize Firebase
+// Initialize Firebase app
 const app = initializeApp(firebaseConfig);
-const auth = initializeAuth(app);
-const db = getFirestore(app,{
-  experimentalForceLongPolling: true,
-  useFetchStreams: false,
-});
-initializeApp(firebaseConfig);
 
+// Initialize Firebase Auth
+const auth = initializeAuth(app,AsyncStorage)
+// Initialize Firestore
+const db = getFirestore(app)
+console.log("Firestore Database Reference:", db);
 export { auth, db };

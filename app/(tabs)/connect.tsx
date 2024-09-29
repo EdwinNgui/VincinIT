@@ -6,126 +6,9 @@ import { db } from '../../firebaseConfig';
 import { EnableConnections, DisableConnections } from '@/components/ToggleOnline'; // Adjust import path accordingly
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 
-interface UserLocation {
-  id: string; // User document ID
-  email: string | null; // User email, which can be null if not available
-  location: {
-    latitude: number; // Latitude of the user's location
-    longitude: number; // Longitude of the user's location
-  } | null; // Location can be null if not available
-}
-
-// Function to fetch all nearby users within 0.2 miles
-const getAllNearbyUsers = async (desiredLocation: { latitude: number; longitude: number }): Promise<UserLocation[]> => {
-  const usersCollectionRef = collection(db, "users"); // Reference to the users collection
-  const userLocations: UserLocation[] = []; // Array to hold user location data
-
-  try {
-    const querySnapshot = await getDocs(usersCollectionRef);
-    const currentUserEmail = getAuth().currentUser?.email;
-
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      if (data.email === currentUserEmail && data.location) {
-        // If the user is the current user, store their location
-        const currentUserLocation = data.location;
-
-        // Check distance for other users
-        querySnapshot.forEach((doc) => {
-          const otherData = doc.data();
-          if (otherData.location) {
-            const h_distance = currentUserLocation.latitude - otherData.location.latitude;
-            const v_distance = currentUserLocation.longitude - otherData.location.longitude;
-            if (Math.sqrt(h_distance ** 2 + v_distance ** 2) <= 0.2) { // Check if within 0.2 miles
-              userLocations.push({
-                id: doc.id,
-                email: otherData.email || null, // Ensure email is null if not present
-                location: {
-                  latitude: otherData.location.latitude,
-                  longitude: otherData.location.longitude,
-                },
-              });
-            }
-          }
-        });
-      }
-    });
-    return userLocations; // Return array of nearby user locations
-  } catch (error) {
-    console.error("Error fetching nearby user locations: ", error);
-    return []; // Return an empty array on error
-  }
-};
-const getUserDetails = async () => {
-  const auth = getAuth();
-  const user = auth.currentUser;
-
-  if (user) {
-    const userDocRef = doc(db, "users", user.uid);
-
-    try {
-      const userDoc = await getDoc(userDocRef);
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        return {
-          email: userData.email,
-          location: userData.location,
-          schoolName: userData.schoolName,
-          year: userData.year,
-          major: userData.major,
-        };
-      } else {
-        console.error("No user document found.");
-        return null;
-      }
-    } catch (error) {
-      console.error("Error fetching user document: ", error);
-      if (error=== 'permission-denied') {
-        Alert.alert("Permission Denied", "You do not have access to this document.");
-      } else {
-        Alert.alert("Error", "An error occurred while fetching user details.");
-      }
-    }
-  } else {
-    console.error("No user is currently signed in.");
-    return null;
-  }
-};
-
-
 export default function HomeScreen() {
   const [isOnline, setIsOnline] = useState(false);
   const [connectionState, setConnectionState] = useState<any>({});
-  const [userDetails, setUserDetails] = useState<any>(null); // State to hold user details
-  const [nearbyUsers, setNearbyUsers] = useState<UserLocation[]>([]); // State to hold nearby users
-
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      const details = await getUserDetails();
-      setUserDetails(details);
-    };
-
-    const fetchNearbyUsers = async () => {
-      if (userDetails?.location) {
-        const users = await getAllNearbyUsers(userDetails.location); // Pass the user's location
-        setNearbyUsers(users);
-      }
-    };
-
-    fetchUserDetails(); // Call the function to fetch user details
-  }, []); // Empty dependency array means this effect runs once when the component mounts
-
-  useEffect(() => {
-    // Fetch nearby users whenever userDetails changes
-    const fetchNearbyUsers = async () => {
-      if (userDetails?.location) {
-        const users = await getAllNearbyUsers(userDetails.location); // Pass the user's location
-        setNearbyUsers(users);
-      }
-    };
-
-    fetchNearbyUsers();
-  }, [userDetails]);
 
   const toggleOnlineStatus = async () => {
     const userEmail = getAuth().currentUser?.email;
@@ -150,7 +33,7 @@ export default function HomeScreen() {
       try {
         // Disable online status
         const { disconnect, unsubscribe, unpublish, removeListener } = connectionState;
-        await DisableConnections(disconnect, unsubscribe, unpublish, removeListener);
+        await DisableConnections(disconnect, unsubscribe);
         console.log('Listener removed');
         setConnectionState({});
       } catch (error) {
@@ -158,7 +41,6 @@ export default function HomeScreen() {
       }
     }
   };
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -172,23 +54,7 @@ export default function HomeScreen() {
             {getAuth().currentUser?.displayName || 'No School Listed'}
           </Text>
         </View>
-        {/* Company Cards in the middle */}
-        <View style={styles.cardContainer}>
-          {nearbyUsers.length > 0 ? (
-            nearbyUsers.map((user) => (
-              <View key={user.id} style={styles.card}>
-                <Text style={styles.companyName}>{user.email || 'No Email'}</Text>
-                <Text style={styles.companyDescription}>
-                  {`Location: ${user.location?.latitude}, ${user.location?.longitude}`}
-                </Text>
-              </View>
-            ))
-          ) : (
-            <Text>No nearby users found.</Text>
-          )}
-        </View>
 
-        {/* Online Status Toggle */}
         <View style={styles.toggleContainer}>
           <Text style={styles.toggleLabel}>Online Status:</Text>
           <Switch 
