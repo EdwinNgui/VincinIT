@@ -1,9 +1,9 @@
+// UserProfileScreen.jsx
 import React, { useEffect } from 'react';
 import { StyleSheet, Platform, ScrollView, View, Image } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import Groq from "groq-sdk"; // Import the Groq SDK
-import Constants from 'expo-constants'; // Import to use environment variables
+import groq from '../../groqConfig'; // Adjust the import path based on your project structure
 
 export default function UserProfileScreen() {
   useEffect(() => {
@@ -11,17 +11,11 @@ export default function UserProfileScreen() {
     main();
   }, []);
 
-  // const groq = new Groq({ apiKey: Constants.extra.groqApiKey });
-  const groqApiKey = Constants.extra.groqApiKey;
-
-  // Initialize Groq with the API key
-  const groq = new Groq({ apiKey: groqApiKey });
-
   async function main() {
     try {
       const chatCompletion = await getGroqChatCompletion();
       // Print the completion returned by the LLM.
-      console.log(chatCompletion.choices[0]?.message?.content || "");
+      console.log(chatCompletion.choices[0]?.message?.content || '');
     } catch (error) {
       console.error('Error fetching Groq response:', error);
     }
@@ -31,8 +25,8 @@ export default function UserProfileScreen() {
     return groq.chat.completions.create({
       messages: [
         {
-          role: "user",
-          content: "Explain the importance of fast language models",
+          role: 'user',
+          content: 'Explain the importance of fast language models',
         },
       ],
       model: "llama-3.1-70b-versatile",
