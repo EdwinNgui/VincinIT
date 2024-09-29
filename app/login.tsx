@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Alert, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, StyleSheet, Alert, Text, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
 import { useRouter } from 'expo-router';
@@ -19,7 +19,11 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // Adjust this value as needed
+    >
       <Text style={styles.title}>
         VelocIT
         <Text style={styles.period}>.</Text>
@@ -44,7 +48,7 @@ const LoginScreen = () => {
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -54,13 +58,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ffffff',
+    paddingHorizontal: 20, // Added padding for better layout on small screens
   },
   period: {
     color: "#8f179f",
   },
   title: {
     fontWeight: 'bold',
-    marginBottom: 300,
+    marginBottom: 40, // Adjusted margin for better spacing
     textAlign: 'center',
     fontSize: 54,
   },
@@ -71,23 +76,22 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingHorizontal: 10,
     marginBottom: 15,
-    width: '70%',
+    width: '100%', // Changed to 100% to make use of the container width
     backgroundColor: '#d0d0d0',
   },
   loginButton: {
-    width: '40%', // Adjust width as needed
-    paddingVertical: 10, // Increased padding for better appearance
+    width: '100%', // Changed to 100% to align with input width
+    paddingVertical: 10,
     backgroundColor: '#8f179f',
     borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20, // Added margin for spacing
+    marginTop: 20,
   },
   loginButtonText: {
     color: '#ffffff',
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingVertical: 10,
   },
 });
 
