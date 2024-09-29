@@ -41,6 +41,7 @@ export default function HomeScreen() {
       }
     }
   };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -73,7 +74,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#6a0dad', // Deep purple background
   },
   scrollContainer: {
     paddingBottom: 16, // Ensures that the content can scroll beyond the last item
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
   profileSection: {
     alignItems: 'center',
     paddingVertical: 20,
-    backgroundColor: '#8E24AA', // Purple color
+    backgroundColor: '#fff', // Purple color
     borderRadius: 20, // Rounded corners on both the top and bottom
     paddingTop: 40, // Added padding for devices with a notch
     marginHorizontal: 16,
@@ -99,49 +100,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     marginLeft: 8,
+    marginRight: 36
   },
   name: {
     fontSize: 24,
-    color: '#fff',
+    color: '#000',
     fontWeight: 'bold',
   },
   title: {
     fontSize: 16,
-    color: '#E1BEE7',
-  },
-  cardContainer: {
-    padding: 16,
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  companyName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  companyDescription: {
-    fontSize: 14,
-    color: '#777',
-    marginTop: 4,
-  },
-  recommended: {
-    marginTop: 8,
-    fontSize: 12,
-    color: 'green',
-    fontWeight: 'bold',
+    color: '#888',
   },
   toggleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center', // Center the items in the toggle container
     marginTop: 10,
   },
   toggleLabel: {
