@@ -5,7 +5,7 @@ import { getAuth } from 'firebase/auth';
 import { EnableConnections, DisableConnections } from '@/components/ToggleOnline'; // Adjust import path accordingly
 
 export default function HomeScreen() {
-  const [isOnline, setIsOnline] = useState(true);
+  const [isOnline, setIsOnline] = useState(false);
   const [connectionState, setConnectionState] = useState<any>({});
 
   const toggleOnlineStatus = async () => {
