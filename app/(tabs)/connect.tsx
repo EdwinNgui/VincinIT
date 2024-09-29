@@ -37,7 +37,7 @@ export default function HomeScreen() {
   const [isOnline, setIsOnline] = useState(false);
   const [connectionState, setConnectionState] = useState<any>({});
   const [nearbyUsers, setNearbyUsers] = useState<any[]>([]); // State to store nearby users
-
+  const [groqResponse, setGroqResponse] = useState(''); // New state for Groq response
   const router = useRouter(); // Initialize the router
 
   // Handler function to navigate to the /pairing route
@@ -96,7 +96,6 @@ export default function HomeScreen() {
         const distance = getDistance(currentLat, currentLon, userLat, userLon);
         const parsed_email = String(userData.email).toLowerCase()
         const parsed_user =String(getAuth().currentUser?.email).toLowerCase()
-        console.log(parsed_email,parsed_user)
         if (distance <= 0.2 && userData.status && parsed_email !== parsed_user) { // Check if within 0.2 miles and online
           users.push({ id: doc.id,...userData, distance });
         }
@@ -107,7 +106,6 @@ export default function HomeScreen() {
       console.error('Error fetching nearby users:', error);
     }
   };
-
   useEffect(() => {
     fetchNearbyUsers(); // Fetch users when the component mounts
     
