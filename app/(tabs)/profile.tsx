@@ -1,15 +1,18 @@
 // UserProfileScreen.jsx
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Platform, ScrollView, View, Image, Text } from 'react-native';
+import { StyleSheet, Platform, ScrollView, View, Image } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import groq from '../../groqConfig'; // Adjust the import path based on your project structure
-
+import {getAuth} from 'firebase/auth'
+import {db} from '../../firebaseConfig';
+import {doc}from'firebase/firestore';
 export default function UserProfileScreen() {
+  const user = getAuth().currentUser
   const [aiDescription, setAiDescription] = useState(''); // State for AI-generated description
   const [interests, setInterests] = useState(['Robotics', 'Money', 'Bread', 'Dough']); // Mutable list of interests
   const [major, setMajor] = useState('Electrical Engineering'); // User's major
-  const [school, setSchool] = useState('University of Michigan'); // User's school
+  const [school, setSchool] = useState(getAuth().currentUser?.displayName); // User's school
   const [flavorText, setFlavorText] = useState('Software Engineer, Ex. Apple, Ex. Netflix'); // User's custom description or flavor text
 
   useEffect(() => {
@@ -45,13 +48,12 @@ export default function UserProfileScreen() {
       {/* Title inside the main container */}
       <ThemedText type="title" style={styles.appName}>
         VelocIT
-        <Text style={styles.period}>.</Text>
       </ThemedText>
 
       {/* Profile Card */}
       <ThemedView style={styles.profileCard}>
         <ThemedText type="title" style={styles.darkText}>
-          Hi Jonathan Dunne,
+          Hi, {getAuth().currentUser?.email}
         </ThemedText>
 
         <Image
@@ -132,7 +134,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 16,
     padding: 16,
-    margin: 24,
+    margin: 16,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.1,
@@ -176,8 +178,5 @@ const styles = StyleSheet.create({
   darkText: {
     color: '#222', // Darker text color for better readability
     marginVertical: 4,
-  },
-  period: {
-    color: "#000",
   },
 });
