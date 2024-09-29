@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, View, Text, TextInput, SafeAreaView, Button } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, TextInput, SafeAreaView, TouchableOpacity } from 'react-native';
 import groq from '../../groqConfig'; // Adjust the import path based on your project structure
 
 export default function HomeScreen() {
@@ -11,19 +11,18 @@ export default function HomeScreen() {
     { name: 'Netflix: User Experience Engineer', note: '' },
     { name: 'Google: Server DevOps Intern', note: '' }
   ]);
+  const [showSummary, setShowSummary] = useState(false); // State to toggle summary visibility
 
-  useEffect(() => {
-    main();
-  }, [companies]); // Trigger main() if companies change
-
-  async function main() {
+  // Function to fetch AI-generated steps and display the summary
+  const handleGenerateNextSteps = async () => {
     try {
       const chatCompletion = await getGroqChatCompletion();
-      setAiDescription(chatCompletion.choices[0]?.message?.content || ''); 
+      setAiDescription(chatCompletion.choices[0]?.message?.content || '');
+      setShowSummary(true); // Show the summary after clicking
     } catch (error) {
       console.error('Error fetching Groq response:', error);
     }
-  }
+  };
 
   async function getGroqChatCompletion() {
     const notes = companies.map(company => `${company.name} - Note: ${company.note}`).join(', '); // Include notes in the request
@@ -67,17 +66,20 @@ export default function HomeScreen() {
 
         {/* Container for Generate Next Steps Button */}
         <View style={styles.buttonContainer}>
-          <Button title="Generate Next Steps" onPress={main} />
+          <TouchableOpacity onPress={handleGenerateNextSteps}>
+            <Text style={styles.buttonText}>Generate Next Steps</Text>
+          </TouchableOpacity>
         </View>
 
-        {/* AI Generated Profile Summary */}
-        <View style={styles.aiSummaryContainer}>
-          <Text style={styles.aiSummaryTitle}>Recommended Next Steps</Text>
-          <Text style={styles.aiSummaryText}>
-            {aiDescription || 'Fetching AI-generated description...'}
-          </Text>
-        </View>
-
+        {/* AI Generated Profile Summary (Conditional rendering) */}
+        {showSummary && (
+          <View style={styles.aiSummaryContainer}>
+            <Text style={styles.aiSummaryTitle}>Recommended Next Steps</Text>
+            <Text style={styles.aiSummaryText}>
+              {aiDescription || 'Fetching AI-generated description...'}
+            </Text>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -86,7 +88,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#6a0dad', // Deep purple background
   },
   scrollContainer: {
     paddingBottom: 16,
@@ -96,15 +98,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 44,
-    marginBottom: 16,
+    marginBottom: 24, // More space below title
     color: '#fff',
   },
   companyContainer: {
     backgroundColor: '#8E24AA',
     borderRadius: 16,
-    padding: 16,
+    padding: 20,
     marginHorizontal: 16,
-    marginVertical: 8,
+    marginVertical: 12, // More space between containers
   },
   companyName: {
     fontSize: 18,
@@ -120,21 +122,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   buttonContainer: {
-    backgroundColor: '#E1BEE7', // Same light purple color for the button container
+    backgroundColor: '#E1BEE7', // Same light purple as the input boxes
     borderRadius: 16,
-    width: '60%' ,
+    width: '60%',
     padding: 16,
     marginHorizontal: 75,
-    marginVertical: 16, // Space between the last company module and the button container
-    alignItems: 'center', // Center the button horizontally
+    marginVertical: 18, // More space above and below the button container
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000', // Black text color for the button
   },
   aiSummaryContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: '#E1BEE7', // Light purple background for AI summary
     borderRadius: 16,
     padding: 32,
     marginHorizontal: 16,
-    marginVertical: 8,
-    marginTop: 32
+    marginVertical: 16, // Space between modules
+    marginTop: 24,
   },
   aiSummaryTitle: {
     fontSize: 18,
