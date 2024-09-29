@@ -1,9 +1,38 @@
+// UserProfileScreen.jsx
+import React, { useEffect } from 'react';
 import { StyleSheet, Platform, ScrollView, View, Image } from 'react-native';
-
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import groq from '../../groqConfig'; // Adjust the import path based on your project structure
 
 export default function UserProfileScreen() {
+  useEffect(() => {
+    // Call the main function when the component loads
+    main();
+  }, []);
+
+  async function main() {
+    try {
+      const chatCompletion = await getGroqChatCompletion();
+      // Print the completion returned by the LLM.
+      console.log(chatCompletion.choices[0]?.message?.content || '');
+    } catch (error) {
+      console.error('Error fetching Groq response:', error);
+    }
+  }
+
+  async function getGroqChatCompletion() {
+    return groq.chat.completions.create({
+      messages: [
+        {
+          role: 'user',
+          content: 'Explain the importance of fast language models',
+        },
+      ],
+      model: "llama-3.1-70b-versatile",
+    });
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Header */}
@@ -20,9 +49,9 @@ export default function UserProfileScreen() {
         </ThemedText>
 
         <Image
-        source={require('@/assets/images/jonnie-modified.png')} // Replace with your image path
-        style={styles.reactLogo}
-        resizeMode="contain" // Maintain aspect ratio
+          source={require('@/assets/images/jonnie-modified.png')} // Replace with your image path
+          style={styles.reactLogo}
+          resizeMode="contain" // Maintain aspect ratio
         />
 
         <ThemedText style={[styles.openingLine, styles.darkText]}>
@@ -32,12 +61,21 @@ export default function UserProfileScreen() {
 
       {/* Profile Details Card */}
       <ThemedView style={styles.detailsCard}>
-        <ThemedText type="subtitle" style={styles.darkText}>Profile Details</ThemedText>
-        <ThemedText style={styles.darkText}>Student at University of Michigan</ThemedText>
+        <ThemedText type="subtitle" style={styles.darkText}>
+          Profile Details
+        </ThemedText>
+        <ThemedText style={styles.darkText}>
+          Student at University of Michigan
+        </ThemedText>
         <ThemedText style={styles.darkText}>Electrical Engineering</ThemedText>
         <ThemedText style={styles.darkText}>Graduation Year</ThemedText>
 
-        <ThemedText type="subtitle" style={[styles.interestsTitle, styles.darkText]}>Interests</ThemedText>
+        <ThemedText
+          type="subtitle"
+          style={[styles.interestsTitle, styles.darkText]}
+        >
+          Interests
+        </ThemedText>
         <View style={styles.interestsContainer}>
           <ThemedText style={styles.interestItem}>Robotics</ThemedText>
           <ThemedText style={styles.interestItem}>Money</ThemedText>
@@ -45,7 +83,6 @@ export default function UserProfileScreen() {
           <ThemedText style={styles.interestItem}>Dough</ThemedText>
         </View>
       </ThemedView>
-
     </ScrollView>
   );
 }
@@ -112,19 +149,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     margin: 4,
     overflow: 'hidden', // Ensures buttons inside follow rounded corners
-    color: '#222'
-  },
-  navigationBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#fff',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderColor: '#ddd',
-  },
-  navItem: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: '#222',
   },
   darkText: {
     color: '#222', // Darker text color for better readability
