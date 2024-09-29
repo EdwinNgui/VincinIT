@@ -147,7 +147,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#6a0dad', // Deep purple background
   },
   scrollContainer: {
     paddingBottom: 16, // Ensures that the content can scroll beyond the last item
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   profileSection: {
     alignItems: 'center',
     paddingVertical: 20,
-    backgroundColor: '#8E24AA', // Purple color
+    backgroundColor: '#fff', // Purple color
     borderRadius: 20, // Rounded corners on both the top and bottom
     paddingTop: 40, // Added padding for devices with a notch
     marginHorizontal: 16,
@@ -173,10 +173,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     marginLeft: 8,
+    marginRight: 36
   },
   name: {
     fontSize: 24,
-    color: '#fff',
+    color: '#000',
     fontWeight: 'bold',
   },
   title: {
@@ -186,6 +187,7 @@ const styles = StyleSheet.create({
   toggleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center', // Center the items in the toggle container
     marginTop: 10,
   },
   toggleLabel: {
