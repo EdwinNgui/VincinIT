@@ -1,86 +1,113 @@
 // src/screens/PairingScreen.tsx
 
-import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, TouchableOpacity, ScrollView, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
+import groq from '../groqConfig'; // Adjust the import path based on your project structure
 
 const PairingScreen: React.FC = () => {
+  const [quote, setQuote] = useState(''); // Use state to hold the quote
   const router = useRouter();
 
   const handleExitPress = () => {
     router.push("./(tabs)/connect"); // Navigates back to the previous screen
   };
 
-  const quote = `"The only limit to our realization of tomorrow is our doubts of today." - Franklin D. Roosevelt`;
+  async function getGroqChatCompletion() {
+    const response = await groq.chat.completions.create({
+      messages: [
+        {
+          role: 'user',
+          content: `Make a creative conversation starter suggestion related to a professional environment. Keep it to one sentence max.`,
+        },
+      ],
+      model: "llama-3.1-70b-versatile",
+    });
+
+    // Update the quote state with the response
+    setQuote(response.choices[0].message.content); // Assuming the response structure is as mentioned
+  }
+
+  // Call the function to set the quote when the component mounts
+  useEffect(() => {
+    getGroqChatCompletion();
+  }, []); // Empty dependency array to run once on mount
 
   return (
-    <ThemedView style={styles.container}>
-      {/* Logo Section */}
-      <ThemedText style={styles.logo}>
-        VelocIT
-        <ThemedText style={styles.period}>.</ThemedText>
-      </ThemedText>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        {/* Logo Section */}
+        <Text style={styles.logo}>
+          VelocIT
+          <Text style={styles.period}>.</Text>
+        </Text>
 
-      <ThemedView style={styles.quoteContainer}>
-        <ThemedText style={styles.quoteText}>
-            {quote}
-        </ThemedText>
-    </ThemedView>
+        {/* Quote Section */}
+        <View style={styles.quoteContainer}>
+          <Text style={styles.quoteText}>
+            {quote || "Loading..."} {/* Display loading message while waiting for the quote */}
+          </Text>
+        </View>
 
-
-      {/* Exit Button */}
-      <TouchableOpacity style={styles.exitButton} onPress={handleExitPress}>
-        <ThemedText style={styles.exitButtonText}>Exit</ThemedText>
-      </TouchableOpacity>
-    </ThemedView>
+        {/* Exit Button */}
+        <TouchableOpacity style={styles.exitButton} onPress={handleExitPress}>
+          <Text style={styles.exitButtonText}>Exit</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
 export default PairingScreen;
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
   container: {
     flex: 1,
     justifyContent: 'center', // Center content vertically
     alignItems: 'center', // Center content horizontally
-    backgroundColor: '#ffffff', // White background
-    padding: 20,
+    backgroundColor: '#f0f0f0', // Light gray background for a softer feel
+    paddingHorizontal: 20, // Better padding for different screen sizes
+    paddingVertical: 30, // Ensure content isn't cut off
   },
   logo: {
-    fontSize: 54,
+    fontSize: 48, // Slightly smaller font size to avoid being cut off
     fontWeight: 'bold',
-    marginBottom: 40,
+    marginBottom: 40, // Spacing between logo and quote
     color: '#000000', // Black color for logo text
+    textAlign: 'center',
   },
   period: {
     color: '#8f179f', // Purple color for the period
   },
   quoteContainer: {
-    marginBottom: 30,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
+    marginTop: 100,
   },
   quoteText: {
-    fontSize: 24,
+    fontSize: 20, // Slightly smaller font for easier readability
     fontStyle: 'italic',
     textAlign: 'center',
-    color: '#333333', // Dark gray color for quote text
+    color: '#555555', // Softer gray for the quote text
+    lineHeight: 28, // Better line height for quote readability
   },
   exitButton: {
-    backgroundColor: '#8f179f', // Purple background
+    backgroundColor: 'transparent', // Transparent background for outlined style
+    borderColor: '#8f179f', // Purple border color
+    borderWidth: 2, // Width of the border
     paddingVertical: 12,
-    paddingHorizontal: 40,
-    borderRadius: 25,
-    elevation: 3, // For Android shadow
-    shadowColor: '#000', // For iOS shadow
-    shadowOffset: { width: 0, height: 2 }, // For iOS shadow
-    shadowOpacity: 0.25, // For iOS shadow
-    shadowRadius: 3.84, // For iOS shadow
+    paddingHorizontal: 50, // Wider padding for a larger tap target
+    borderRadius: 30, // More rounded button for a modern look
+    elevation: 0, // No elevation for outlined button
+    marginTop: 280,
   },
   exitButtonText: {
-    color: '#FFFFFF', // White text
+    color: '#8f179f', // Purple text color for the button
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '600', // Slightly less bold for a softer feel
+    textAlign: 'center', // Center text inside the button
   },
 });
