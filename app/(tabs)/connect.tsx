@@ -1,11 +1,11 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View, Text, Switch, SafeAreaView, Alert } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, Switch, SafeAreaView, Alert, TouchableOpacity  } from 'react-native';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../firebaseConfig';
 import { EnableConnections, DisableConnections } from '@/components/ToggleOnline'; // Adjust import path accordingly
-import { collection, doc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import * as Location from 'expo-location';
+import { useRouter } from 'expo-router';
 
 // Function to calculate distance between two coordinates
 const getDistance = (lat1:number, lon1:number, lat2:number, lon2:number) => {
@@ -20,10 +20,19 @@ const getDistance = (lat1:number, lon1:number, lat2:number, lon2:number) => {
   return R * c; // Distance in miles
 };
 
+
+
 export default function HomeScreen() {
   const [isOnline, setIsOnline] = useState(false);
   const [connectionState, setConnectionState] = useState<any>({});
   const [nearbyUsers, setNearbyUsers] = useState<any[]>([]); // State to store nearby users
+
+  const router = useRouter(); // Initialize the router
+
+  // Handler function to navigate to the /pairing route
+  const handlePairingNavigation = () => {
+    router.push('../pairing'); // Navigate to /pairing
+  };
 
   const toggleOnlineStatus = async () => {
     const userEmail = getAuth().currentUser?.email;
@@ -133,11 +142,11 @@ export default function HomeScreen() {
             <Text style={styles.noUsersText}>No nearby users found.</Text>
           ) : (
             nearbyUsers.map(user => (
-              <View key={user.id} style={styles.userCard}>
+              <TouchableOpacity onPress={handlePairingNavigation} key={user.id} style={styles.userCard}>
                 <Text style={styles.userName}>{user.email}</Text>
                 <Text style={styles.userName}>{user.schoolName}</Text>
                 <Text style={styles.userDistance}>{user.distance.toFixed(3)} miles away</Text>
-              </View>
+              </TouchableOpacity >
             ))
           )}
         </View>
