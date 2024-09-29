@@ -7,6 +7,7 @@ import { collection, getDocs } from "firebase/firestore";
 import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
 import groq from '../../groqConfig';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 // Function to calculate distance between two coordinates
 const getDistance = (lat1:number, lon1:number, lat2:number, lon2:number) => {
@@ -83,8 +84,6 @@ export default function HomeScreen() {
       const currentLat = userLocation.coords.latitude;
       const currentLon = userLocation.coords.longitude;
 
-      console.log(`Current location: Latitude: ${currentLat}, Longitude: ${currentLon}`);
-
       const usersSnapshot = await getDocs(collection(db, 'users'));
       const users: any[] = [];
 
@@ -95,13 +94,15 @@ export default function HomeScreen() {
 
         // Calculate distance to each user
         const distance = getDistance(currentLat, currentLon, userLat, userLon);
-        if (distance <= 0.2 && userData.status && !(String(userData.email).toUpperCase === String(getAuth().currentUser?.email).toUpperCase)) { // Check if within 0.2 miles and online
+        const parsed_email = String(userData.email).toLowerCase()
+        const parsed_user =String(getAuth().currentUser?.email).toLowerCase()
+        console.log(parsed_email,parsed_user)
+        if (distance <= 0.2 && userData.status && parsed_email !== parsed_user) { // Check if within 0.2 miles and online
           users.push({ id: doc.id,...userData, distance });
         }
       });
       
       setNearbyUsers(users); // Update state with nearby users
-      console.log('Nearby users:', users);
     } catch (error) {
       console.error('Error fetching nearby users:', error);
     }
