@@ -46,7 +46,9 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* VelocIT Title */}
-        <Text style={styles.pageTitle}>VelocIT</Text>
+        <Text style={styles.pageTitle}>VelocIT
+          <Text style={styles.period}>.</Text>
+        </Text>
 
         {/* Top Section - Profile Text with Rounded Corners */}
         <View style={styles.profileSection}>
@@ -121,5 +123,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     marginRight: 8,
-  }
+  },
+  period: {
+    color: "#000",
+  },
 });

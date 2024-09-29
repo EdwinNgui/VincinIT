@@ -1,6 +1,6 @@
 // UserProfileScreen.jsx
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Platform, ScrollView, View, Image } from 'react-native';
+import { StyleSheet, Platform, ScrollView, View, Image, Text } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import groq from '../../groqConfig'; // Adjust the import path based on your project structure
@@ -45,6 +45,7 @@ export default function UserProfileScreen() {
       {/* Title inside the main container */}
       <ThemedText type="title" style={styles.appName}>
         VelocIT
+        <Text style={styles.period}>.</Text>
       </ThemedText>
 
       {/* Profile Card */}
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 16,
     padding: 16,
-    margin: 16,
+    margin: 24,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.1,
@@ -175,5 +176,8 @@ const styles = StyleSheet.create({
   darkText: {
     color: '#222', // Darker text color for better readability
     marginVertical: 4,
+  },
+  period: {
+    color: "#000",
   },
 });

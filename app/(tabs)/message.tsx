@@ -48,8 +48,10 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* VelocIT Title */}
-        <Text style={styles.pageTitle}>VelocIT</Text>
-
+        <Text style={styles.pageTitle}>VelocIT
+          <Text style={styles.period}>.</Text>
+        </Text>
+        
         {/* Company List with Notes */}
         {companies.map((company, index) => (
           <View key={index} style={styles.companyContainer}>
@@ -152,5 +154,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
     marginTop: 8,
+  },
+  period: {
+    color: "#000",
   },
 });
