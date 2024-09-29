@@ -1,9 +1,8 @@
-// RegisterScreen.js
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Button, Alert, Text } from 'react-native';
+import { View, TextInput, StyleSheet, Button, Alert, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db } from '../firebaseConfig';
-import { Redirect, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { doc, updateDoc } from 'firebase/firestore';
 
 const RegisterScreen = () => {
@@ -31,55 +30,64 @@ const RegisterScreen = () => {
           major: major,
         });
       }
-      router.push("./(tabs)/connect")
-    } catch (error:any) {
+      router.push("./(tabs)/connect");
+    } catch (error: any) {
       Alert.alert('Registration failed', error.message); // Updated to use error.message
     }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.box}>
-        <Text style={styles.title}>Register</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="School Name"
-          value={schoolName}
-          onChangeText={setSchoolName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Year"
-          value={year}
-          onChangeText={setYear}
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Major"
-          value={major}
-          onChangeText={setMajor}
-        />
-        <Button title="Register" onPress={handleRegister} />
-      </View>
-    </View>
+    <KeyboardAvoidingView 
+      style={styles.container} 
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // Adjust the offset if necessary
+    >
+      <Text style={styles.title}>
+        VelocIT
+        <Text style={styles.period}>.</Text>
+      </Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        placeholderTextColor="#b5b5b5"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        placeholderTextColor="#b5b5b5"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="School Name"
+        value={schoolName}
+        onChangeText={setSchoolName}
+        placeholderTextColor="#b5b5b5"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Year"
+        value={year}
+        onChangeText={setYear}
+        keyboardType="numeric"
+        placeholderTextColor="#b5b5b5"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Major"
+        value={major}
+        onChangeText={setMajor}
+        placeholderTextColor="#b5b5b5"
+      />
+      <Button title="Register" onPress={handleRegister} />
+    </KeyboardAvoidingView>
   );
-  
 };
 
 const styles = StyleSheet.create({
@@ -89,30 +97,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
-  box: {
-    width: '80%',
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5,
+  period: {
+    color: "#8f179f",
   },
   title: {
-    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 40,
     textAlign: 'center',
+    fontSize: 54,
   },
   input: {
     height: 40,
+    width: '70%',
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 15,
+    backgroundColor: '#d0d0d0',
   },
 });
 
