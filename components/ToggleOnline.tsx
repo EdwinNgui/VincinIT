@@ -1,7 +1,7 @@
 import * as Location from 'expo-location';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig'; // Import your Firestore configuration
-
+import {getAuth}from 'firebase/auth';
 const EnableConnections = async (firebaseUsername: string) => {
   // Request location permission
   const { status } = await Location.requestForegroundPermissionsAsync();
@@ -26,9 +26,9 @@ const EnableConnections = async (firebaseUsername: string) => {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     };
-
+    const id = String(getAuth().currentUser?.uid)
     // Set the user data in Firestore under the 'users' collection using their username
-    const userDocRef = doc(db, 'users', firebaseUsername);
+    const userDocRef = doc(db, 'users', id);
     await setDoc(userDocRef, firestoreUserData); // This will create a new document or overwrite if it exists
   } catch (error) {
     console.error('Error posting location to Firestore:', error);
