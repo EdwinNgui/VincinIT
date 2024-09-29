@@ -15,7 +15,8 @@ const RegisterScreen = () => {
     year: '',
     major: '',
     lat: 0,
-    long: 0
+    long: 0,
+    status:0
   });
 
   const handleInputChange = (field: string, value: string) => {
@@ -61,7 +62,8 @@ const RegisterScreen = () => {
         year: year,
         major: major,
         latitude:lat,
-        longitude:long
+        longitude:long,
+        status:0
       };
       console.log("")
       // Set the user data in Firestore under the 'users' collection using their UID
