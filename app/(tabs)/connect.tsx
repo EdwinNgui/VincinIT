@@ -145,6 +145,7 @@ export default function HomeScreen() {
               <TouchableOpacity onPress={handlePairingNavigation} key={user.id} style={styles.userCard}>
                 <Text style={styles.userName}>{user.email}</Text>
                 <Text style={styles.userName}>{user.schoolName}</Text>
+                <Text style={styles.userName}>{user.major}</Text>
                 <Text style={styles.userDistance}>{user.distance.toFixed(3)} miles away</Text>
               </TouchableOpacity >
             ))
