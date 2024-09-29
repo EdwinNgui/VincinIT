@@ -1,6 +1,9 @@
 import React, { useMemo, useEffect } from 'react';
 import * as Location from 'expo-location';
 import Constants from 'expo-constants';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../firebaseConfig'; // Import your Firestore configuration
+import { getAuth } from 'firebase/auth';
 
 const EnableConnections = async (firebaseUsername: any) => {
   // Request location permission
@@ -20,9 +23,19 @@ const EnableConnections = async (firebaseUsername: any) => {
   // Get the user's current location
   const location = await Location.getCurrentPositionAsync({});
   console.log(`Current location: ${location.coords.latitude}, ${location.coords.longitude}`);
-
-  // You can add your custom logic here, e.g., publish location or connect to a server
-
+  try {
+    const userDocRef = doc(db, 'users', firebaseUsername);
+    await setDoc(userDocRef, {
+      location: {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      },
+      timestamp: new Date(),
+    }, { merge: true });
+    console.log('Current location posted to Firestore successfully.');
+  } catch (error) {
+    console.error('Error posting location to Firestore:', error);
+  }
   return {
     // No disconnect, unpublish, or unsubscribe needed for location
     location, 

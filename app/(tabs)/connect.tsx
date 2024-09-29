@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View, Text, TouchableOpacity, Switch, SafeAreaView } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, Switch, SafeAreaView, Alert } from 'react-native';
 import { getAuth } from 'firebase/auth';
 import { EnableConnections, DisableConnections } from '@/components/ToggleOnline'; // Adjust import path accordingly
 
@@ -9,19 +9,34 @@ export default function HomeScreen() {
   const [connectionState, setConnectionState] = useState<any>({});
 
   const toggleOnlineStatus = async () => {
-    setIsOnline(!isOnline);
+    const userEmail = getAuth().currentUser?.email;
+
+    if (!userEmail) {
+      Alert.alert('Error', 'User not authenticated');
+      return;
+    }
+
+    setIsOnline((prev) => !prev); // Toggle online status
 
     if (!isOnline) {
-      // Enable online status
-      const connection = await EnableConnections(getAuth().currentUser?.email);
-      setConnectionState(connection);
+      try {
+        // Enable online status
+        const connection = await EnableConnections(userEmail);
+        setConnectionState(connection);
+      } catch (error) {
+        Alert.alert('Error', 'Failed to enable connections');
+        setIsOnline(false); // Reset online status in case of error
+      }
     } else {
-      // Disable online status
-      const { disconnect, unsubscribe, unpublish } = connectionState;
-      await DisableConnections(disconnect, unsubscribe, unpublish, () => {
+      try {
+        // Disable online status
+        const { disconnect, unsubscribe, unpublish,removeListener } = connectionState;
+        await DisableConnections(disconnect, unsubscribe, unpublish, removeListener);
         console.log('Listener removed');
-      });
-      setConnectionState({});
+        setConnectionState({});
+      } catch (error) {
+        Alert.alert('Error', 'Failed to disable connections');
+      }
     }
   };
 
@@ -34,16 +49,18 @@ export default function HomeScreen() {
         {/* Top Section - Profile Text with Rounded Corners */}
         <View style={styles.profileSection}>
           <Text style={styles.name}>{getAuth().currentUser?.email}</Text>
-          <Text style={styles.title}>{getAuth().currentUser?.displayName}</Text>
+          <Text style={styles.title}>
+            {getAuth().currentUser?.displayName || 'No Display Name'}
+          </Text>
         </View>
 
         {/* Company Cards in the middle */}
         <View style={styles.cardContainer}>
-          {['Apple, Inc.', 'Apple, Inc.', 'Apple, Inc.', 'Apple, Inc.'].map((company, index) => (
+          {['Apple, Inc.', 'Google, Inc.', 'Microsoft, Inc.', 'Tesla, Inc.'].map((company, index) => (
             <View key={index} style={styles.card}>
               <Text style={styles.companyName}>{company}</Text>
               <Text style={styles.companyDescription}>
-                Apple is a key leader in this and that so they are usually making pretty cool phones and stuff.
+                {`${company} is a key leader in this and that, making innovative technology.`}
               </Text>
               {index === 0 && <Text style={styles.recommended}>Recommended</Text>}
             </View>
@@ -61,7 +78,6 @@ export default function HomeScreen() {
           />
           <Text style={styles.statusText}>{isOnline ? "Online" : "Offline"}</Text>
         </View>
-        
       </ScrollView>
     </SafeAreaView>
   );

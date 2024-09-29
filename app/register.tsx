@@ -28,6 +28,7 @@ const RegisterScreen = () => {
           schoolName: schoolName,
           year: year,
           major: major,
+          location:{},
         });
       }
       router.push("./(tabs)/connect");
