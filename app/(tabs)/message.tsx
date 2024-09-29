@@ -1,70 +1,122 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, View, Text, Switch, SafeAreaView } from 'react-native';
+import { getAuth } from 'firebase/auth';
+import { doc, getDoc } from "firebase/firestore";
+import { db } from '../../firebaseConfig';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+// Function to fetch user details using auth token
+const getUserDetails = async () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
 
-export default function TabThreeScreen() {
+  if (user) {
+    const userDocRef = doc(db, "users", user.uid);
+
+    try {
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        return {
+          email: userData.email,
+          location: userData.location,
+          schoolName: userData.schoolName,
+          year: userData.year,
+          major: userData.major,
+        };
+      } else {
+        console.error("No user document found.");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching user document: ", error);
+      return null;
+    }
+  } else {
+    console.error("No user is currently signed in.");
+    return null;
+  }
+};
+
+export default function HomeScreen() {
+  const [isOnline, setIsOnline] = useState(false);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* VelocIT Title */}
+        <Text style={styles.pageTitle}>VelocIT</Text>
+
+        {/* Top Section - Profile Text with Rounded Corners */}
+        <View style={styles.profileSection}>
+          <Text style={styles.name}>{getAuth().currentUser?.email || 'No Email'}</Text>
+          <Text style={styles.title}>
+            {getAuth().currentUser?.displayName || 'No School Listed'}
+          </Text>
+        </View>
+
+        {/* Online Status Toggle */}
+        <View style={styles.toggleContainer}>
+          <Text style={styles.toggleLabel}>Online Status:</Text>
+          <Switch 
+            value={isOnline} 
+            onValueChange={() => setIsOnline(prev => !prev)} 
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={isOnline ? "#f5dd4b" : "#f4f3f4"}
+          />
+          <Text style={styles.statusText}>{isOnline ? "Online" : "Offline"}</Text>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
+  scrollContainer: {
+    paddingBottom: 16, // Ensures that the content can scroll beyond the last item
+  },
+  pageTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 44, // Pushes the title 44px from the top
+    marginBottom: 16, // Space between title and profile section
+    color: '#fff',
+  },
+  profileSection: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    backgroundColor: '#8E24AA', // Purple color
+    borderRadius: 20, // Rounded corners on both the top and bottom
+    paddingTop: 40, // Added padding for devices with a notch
+    marginHorizontal: 16,
+    marginBottom: 16,
+  },
+  statusText: {
+    fontSize: 16,
+    color: '#fff',
+    marginLeft: 8,
+  },
+  name: {
+    fontSize: 24,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  title: {
+    fontSize: 16,
+    color: '#E1BEE7',
+  },
+  toggleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    marginTop: 10,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  toggleLabel: {
+    fontSize: 16,
+    color: '#fff',
+    marginRight: 8,
   },
 });
