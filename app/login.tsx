@@ -1,9 +1,8 @@
-// LoginScreen.js
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Button, Alert, Text } from 'react-native';
+import { View, TextInput, StyleSheet, Alert, Text, TouchableOpacity } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
-import { Redirect, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -13,34 +12,38 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("./(tabs)/connect")
-
-    } catch (error:any) {
-      Alert.alert('Login failed', error.message); // Updated to use error.message
+      router.push("./(tabs)/connect");
+    } catch (error: any) {
+      Alert.alert('Login failed', error.message);
     }
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.box}>
-        <Text style={styles.title}>Login</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-        <Button title="Login" onPress={handleLogin} />
-      </View>
+      <Text style={styles.title}>
+        VelocIT
+        <Text style={styles.period}>.</Text>
+      </Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        placeholderTextColor="#b5b5b5"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        placeholderTextColor="#b5b5b5"
+      />
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginButtonText}>Login</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -50,32 +53,41 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',
+    backgroundColor: '#ffffff',
   },
-  box: {
-    width: '80%',
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5,
+  period: {
+    color: "#8f179f",
   },
   title: {
-    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 300,
     textAlign: 'center',
+    fontSize: 54,
   },
   input: {
-    height: 40,
+    height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 15,
     paddingHorizontal: 10,
     marginBottom: 15,
+    width: '70%',
+    backgroundColor: '#d0d0d0',
+  },
+  loginButton: {
+    width: '40%', // Adjust width as needed
+    paddingVertical: 10, // Increased padding for better appearance
+    backgroundColor: '#8f179f',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20, // Added margin for spacing
+  },
+  loginButtonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingVertical: 10,
   },
 });
 
