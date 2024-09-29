@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     width: '100%', // Changed to 100% to align with input width
-    paddingVertical: 10,
+    paddingVertical: 15,
     backgroundColor: '#8f179f',
     borderRadius: 15,
     justifyContent: 'center',
