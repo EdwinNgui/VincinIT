@@ -1,12 +1,16 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, TouchableOpacity,Switch, SafeAreaView } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import { getAuth } from 'firebase/auth';
 
 export default function HomeScreen() {
   const [isOnline, setIsOnline] = useState(true);
+
+  const toggleOnlineStatus = () => {
+    setIsOnline((prevState) => !prevState);
+  };
   
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -32,6 +36,18 @@ export default function HomeScreen() {
             </View>
           ))}
         </View>
+
+        {/* Online Status Toggle */}
+        <View style={styles.toggleContainer}>
+          <Text style={styles.toggleLabel}>Online Status:</Text>
+          <Switch 
+            value={isOnline} 
+            onValueChange={toggleOnlineStatus} 
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={isOnline ? "#f5dd4b" : "#f4f3f4"}            />
+            <Text style={styles.statusText}>{isOnline ? "Online" : "Offline"}</Text>
+        </View>
+        
       </ScrollView>
     </SafeAreaView>
   );
@@ -61,6 +77,11 @@ const styles = StyleSheet.create({
     paddingTop: 40, // Added padding for devices with a notch
     marginHorizontal: 16,
     marginBottom: 16,
+  },
+  statusText: {
+    fontSize: 16,
+    color: '#fff',
+    marginLeft: 8,
   },
   name: {
     fontSize: 24,
@@ -101,4 +122,14 @@ const styles = StyleSheet.create({
     color: 'green',
     fontWeight: 'bold',
   },
+  toggleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  toggleLabel: {
+    fontSize: 16,
+    color: '#fff',
+    marginRight: 8,
+  }
 });
