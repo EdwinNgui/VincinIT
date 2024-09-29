@@ -6,6 +6,7 @@ import { EnableConnections, DisableConnections } from '@/components/ToggleOnline
 import { collection, getDocs } from "firebase/firestore";
 import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
+import groq from '../../groqConfig';
 
 // Function to calculate distance between two coordinates
 const getDistance = (lat1:number, lon1:number, lat2:number, lon2:number) => {
@@ -20,8 +21,17 @@ const getDistance = (lat1:number, lon1:number, lat2:number, lon2:number) => {
   return R * c; // Distance in miles
 };
 
-
-
+async function getGroqChatCompletion(user:any) {
+  return groq.chat.completions.create({
+    messages: [
+      {
+        role: 'user',
+        content: `Tell me about a user named ${user.email} who studies ${user.major} at ${user.schoolName}.`,
+      },
+    ],
+    model: "llama-3.1-70b-versatile",
+  });
+}
 export default function HomeScreen() {
   const [isOnline, setIsOnline] = useState(false);
   const [connectionState, setConnectionState] = useState<any>({});
@@ -89,7 +99,7 @@ export default function HomeScreen() {
           users.push({ id: doc.id,...userData, distance });
         }
       });
-
+      
       setNearbyUsers(users); // Update state with nearby users
       console.log('Nearby users:', users);
     } catch (error) {
@@ -180,6 +190,23 @@ const styles = StyleSheet.create({
     paddingTop: 40, // Added padding for devices with a notch
     marginHorizontal: 16,
     marginBottom: 16,
+  },
+  groqResponseContainer: {
+    backgroundColor: '#3E2723', // Dark brown background
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  groqResponseTitle: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  groqResponseText: {
+    color: '#E1BEE7',
+    fontSize: 14,
   },
   statusText: {
     fontSize: 16,
