@@ -4,7 +4,6 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import Groq from "groq-sdk"; // Import the Groq SDK
 import Constants from 'expo-constants'; // Import to use environment variables
-import 'dotenv/config';
 
 export default function UserProfileScreen() {
   useEffect(() => {
@@ -36,7 +35,7 @@ export default function UserProfileScreen() {
           content: "Explain the importance of fast language models",
         },
       ],
-      model: "llama3-8b-8192",
+      model: "llama-3.1-70b-versatile",
     });
   }
 
