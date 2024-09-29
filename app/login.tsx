@@ -4,11 +4,18 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebaseConfig'; // Make sure you import Firestore
 
 const LoginScreen = () => {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [userData, setUserData] = useState({
+    email: '',
+    password: '',
+    schoolName: '',
+    year: '',
+    major: ''
+  });
 
   // Use useEffect to load previously saved credentials
   useEffect(() => {
@@ -17,8 +24,8 @@ const LoginScreen = () => {
         const savedEmail = await AsyncStorage.getItem('userEmail');
         const savedPassword = await AsyncStorage.getItem('userPassword');
 
-        if (savedEmail) setEmail(savedEmail);
-        if (savedPassword) setPassword(savedPassword);
+        if (savedEmail) setUserData(prev => ({ ...prev, email: savedEmail }));
+        if (savedPassword) setUserData(prev => ({ ...prev, password: savedPassword }));
       } catch (error) {
         console.error('Failed to load credentials:', error);
       }
@@ -27,14 +34,51 @@ const LoginScreen = () => {
     loadCredentials();
   }, []);
 
+  const handleInputChange = (field: string, value: string) => {
+    setUserData(prev => ({ ...prev, [field]: value }));
+  };
+
   const handleLogin = async () => {
+    const { email, password } = userData;
+
+    // Basic validation
+    if (!email || !password) {
+      Alert.alert('Email and password are required!');
+      return;
+    }
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
       // Save credentials for future use
       await AsyncStorage.setItem('userEmail', email);
       await AsyncStorage.setItem('userPassword', password);
-      
+
+      // Retrieve the user document from Firestore
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        const userDataFromFirestore = userDoc.data();
+        setUserData(prev => ({
+          ...prev,
+          schoolName: userDataFromFirestore.schoolName || '',
+          year: userDataFromFirestore.year || '',
+          major: userDataFromFirestore.major || ''
+        }));
+      } else {
+        console.log("No such document!");
+      }
+
+      // Optionally update user data in Firestore if fields have been changed
+      await updateDoc(userDocRef, {
+        // Here you can set the fields you want to update
+        schoolName: userData.schoolName,
+        year: userData.year,
+        major: userData.major
+      });
+
       router.push("./(tabs)/connect");
     } catch (error: any) {
       Alert.alert('Login failed', error.message);
@@ -45,7 +89,7 @@ const LoginScreen = () => {
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // Adjust this value as needed
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
     >
       <Text style={styles.title}>
         VelocIT
@@ -54,8 +98,8 @@ const LoginScreen = () => {
       <TextInput
         style={styles.input}
         placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
+        value={userData.email}
+        onChangeText={(value) => handleInputChange('email', value)}
         keyboardType="email-address"
         autoCapitalize="none"
         placeholderTextColor="#b5b5b5"
@@ -63,8 +107,8 @@ const LoginScreen = () => {
       <TextInput
         style={styles.input}
         placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
+        value={userData.password}
+        onChangeText={(value) => handleInputChange('password', value)}
         secureTextEntry
         placeholderTextColor="#b5b5b5"
       />
@@ -81,14 +125,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ffffff',
-    paddingHorizontal: 20, // Added padding for better layout on small screens
+    paddingHorizontal: 20,
   },
   period: {
     color: "#8f179f",
   },
   title: {
     fontWeight: 'bold',
-    marginBottom: 40, // Adjusted margin for better spacing
+    marginBottom: 40,
     textAlign: 'center',
     fontSize: 54,
   },
@@ -99,11 +143,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingHorizontal: 10,
     marginBottom: 15,
-    width: '100%', // Changed to 100% to make use of the container width
+    width: '100%',
     backgroundColor: '#d0d0d0',
   },
   loginButton: {
-    width: '100%', // Changed to 100% to align with input width
+    width: '100%',
     paddingVertical: 15,
     backgroundColor: '#8f179f',
     borderRadius: 15,

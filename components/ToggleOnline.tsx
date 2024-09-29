@@ -1,5 +1,5 @@
 import * as Location from 'expo-location';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig'; // Import your Firestore configuration
 import {getAuth}from 'firebase/auth';
 const EnableConnections = async (firebaseUsername: string) => {
@@ -30,7 +30,7 @@ const EnableConnections = async (firebaseUsername: string) => {
     const id = String(getAuth().currentUser?.uid)
     // Set the user data in Firestore under the 'users' collection using their username
     const userDocRef = doc(db, 'users', id);
-    await setDoc(userDocRef, firestoreUserData); // This will create a new document or overwrite if it exists
+    await updateDoc(userDocRef, firestoreUserData); // This will create a new document or overwrite if it exists
   } catch (error) {
     console.error('Error posting location to Firestore:', error);
   }
@@ -49,7 +49,7 @@ const DisableConnections = async (disconnect: any, removeListener: any) => {
     const id = String(getAuth().currentUser?.uid)
     // Set the user data in Firestore under the 'users' collection using their username
     const userDocRef = doc(db, 'users', id);
-    await setDoc(userDocRef, firestoreUserData); // This will create a new document or overwrite if it exists
+    await updateDoc(userDocRef, firestoreUserData); // This will create a new document or overwrite if it exists
   } catch (error) {
     console.error('Error posting location to Firestore:', error);
   }
