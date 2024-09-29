@@ -1,4 +1,4 @@
-import { StyleSheet, Platform, ScrollView, View } from 'react-native';
+import { StyleSheet, Platform, ScrollView, View, Image } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -16,10 +16,17 @@ export default function UserProfileScreen() {
       {/* Profile Card */}
       <ThemedView style={styles.profileCard}>
         <ThemedText type="title" style={styles.darkText}>
-          Hi John Smith,
+          Hi Jonathan Dunne,
         </ThemedText>
+
+        <Image
+        source={require('@/assets/images/jonnie-modified.png')} // Replace with your image path
+        style={styles.reactLogo}
+        resizeMode="contain" // Maintain aspect ratio
+        />
+
         <ThemedText style={[styles.openingLine, styles.darkText]}>
-          "This is our opening line frfr"
+          "Software Engineer, Ex. Apple, Ex. Netflix"
         </ThemedText>
       </ThemedView>
 
@@ -58,6 +65,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
+  reactLogo: {
+    height: 178,
+    width: 290,
+    marginTop: 40,
+  },
   profileCard: {
     backgroundColor: '#fff',
     borderRadius: 16,
@@ -73,6 +85,9 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     textAlign: 'center',
     marginVertical: 8,
+    fontSize: 16,
+    marginTop: 14,
+    fontWeight: 'bold',
   },
   detailsCard: {
     backgroundColor: '#C292E6',
@@ -88,13 +103,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: 8,
+    borderRadius: 16,
   },
   interestItem: {
     backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 16,
+    borderRadius: 12,
     margin: 4,
+    overflow: 'hidden', // Ensures buttons inside follow rounded corners
     color: '#222'
   },
   navigationBar: {
@@ -111,5 +128,6 @@ const styles = StyleSheet.create({
   },
   darkText: {
     color: '#222', // Darker text color for better readability
+    marginVertical: 4,
   },
 });

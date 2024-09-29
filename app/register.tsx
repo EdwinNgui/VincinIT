@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Button, Alert, Text, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, TextInput, StyleSheet, Button, Alert, Text, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db } from '../firebaseConfig';
 import { useRouter } from 'expo-router';
@@ -86,7 +86,9 @@ const RegisterScreen = () => {
         onChangeText={setMajor}
         placeholderTextColor="#b5b5b5"
       />
-      <Button title="Register" onPress={handleRegister} />
+      <TouchableOpacity style={styles.loginButton} onPress={handleRegister}>
+        <Text style={styles.loginButtonText}>Register</Text>
+      </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 };
@@ -116,6 +118,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 15,
     backgroundColor: '#d0d0d0',
+  },
+  loginButton: {
+    width: '80%', // Changed to 100% to align with input width
+    paddingVertical: 15,
+    backgroundColor: '#8f179f',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  loginButtonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
