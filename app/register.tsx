@@ -23,6 +23,7 @@ const RegisterScreen = () => {
 
         // Update additional user information in Firestore
         const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        
         await updateDoc(userDocRef, {
           email: email,
           schoolName: schoolName,
