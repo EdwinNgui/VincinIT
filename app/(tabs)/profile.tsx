@@ -7,11 +7,15 @@ import groq from '../../groqConfig'; // Adjust the import path based on your pro
 
 export default function UserProfileScreen() {
   const [aiDescription, setAiDescription] = useState(''); // State for AI-generated description
+  const [interests, setInterests] = useState(['Robotics', 'Money', 'Bread', 'Dough']); // Mutable list of interests
+  const [major, setMajor] = useState('Electrical Engineering'); // User's major
+  const [school, setSchool] = useState('University of Michigan'); // User's school
+  const [flavorText, setFlavorText] = useState('Software Engineer, Ex. Apple, Ex. Netflix'); // User's custom description or flavor text
 
   useEffect(() => {
     // Call the main function when the component loads
     main();
-  }, []);
+  }, [interests, major, school, flavorText]); // Trigger main() if any of these values change
 
   async function main() {
     try {
@@ -24,11 +28,12 @@ export default function UserProfileScreen() {
   }
 
   async function getGroqChatCompletion() {
+    const interestsString = interests.join(', '); // Create a comma-separated string of interests
     return groq.chat.completions.create({
       messages: [
         {
           role: 'user',
-          content: 'Give a description of this user based on their interests: Robotics, Money, Bread, Dough. Limit to 2-3 Sentences.',
+          content: `Give a description of this user. Their interests include: ${interestsString}. They are majoring in ${major}, attending ${school}. Additional details: ${flavorText}. Limit to 3-4 sentences.`,
         },
       ],
       model: "llama-3.1-70b-versatile",
@@ -57,7 +62,7 @@ export default function UserProfileScreen() {
         />
 
         <ThemedText style={[styles.openingLine, styles.darkText]}>
-          "Software Engineer, Ex. Apple, Ex. Netflix"
+          {flavorText}
         </ThemedText>
       </ThemedView>
 
@@ -67,9 +72,11 @@ export default function UserProfileScreen() {
           Profile Details
         </ThemedText>
         <ThemedText style={styles.darkText}>
-          Student at University of Michigan
+          {school}
         </ThemedText>
-        <ThemedText style={styles.darkText}>Electrical Engineering</ThemedText>
+        <ThemedText style={styles.darkText}>
+          Major: {major}
+        </ThemedText>
         <ThemedText style={styles.darkText}>Graduation Year</ThemedText>
 
         <ThemedText
@@ -79,10 +86,12 @@ export default function UserProfileScreen() {
           Interests
         </ThemedText>
         <View style={styles.interestsContainer}>
-          <ThemedText style={styles.interestItem}>Robotics</ThemedText>
-          <ThemedText style={styles.interestItem}>Money</ThemedText>
-          <ThemedText style={styles.interestItem}>Bread</ThemedText>
-          <ThemedText style={styles.interestItem}>Dough</ThemedText>
+          {/* Render interests dynamically */}
+          {interests.map((interest, index) => (
+            <ThemedText key={index} style={styles.interestItem}>
+              {interest}
+            </ThemedText>
+          ))}
         </View>
       </ThemedView>
 
