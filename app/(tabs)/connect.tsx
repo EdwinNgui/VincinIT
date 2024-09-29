@@ -95,7 +95,7 @@ export default function HomeScreen() {
 
         // Calculate distance to each user
         const distance = getDistance(currentLat, currentLon, userLat, userLon);
-        if (distance <= 0.2 && userData.status && userData.email !== getAuth().currentUser?.email) { // Check if within 0.2 miles and online
+        if (distance <= 0.2 && userData.status && !(String(userData.email).toUpperCase === String(getAuth().currentUser?.email).toUpperCase)) { // Check if within 0.2 miles and online
           users.push({ id: doc.id,...userData, distance });
         }
       });
@@ -111,8 +111,8 @@ export default function HomeScreen() {
     fetchNearbyUsers(); // Fetch users when the component mounts
     
     const intervalId = setInterval(() => {
-      fetchNearbyUsers(); // Fetch users every 5 seconds
-    }, 5000); // Adjust the interval as needed
+      fetchNearbyUsers(); // Fetch users every 1 seconds
+    }, 1000); // Adjust the interval as needed
 
     // Clean up the interval on component unmount
     return () => clearInterval(intervalId);
