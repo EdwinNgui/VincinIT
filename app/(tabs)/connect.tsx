@@ -1,16 +1,17 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedView } from '@/components/ThemedView';
+import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 
 export default function HomeScreen() {
   const [isOnline, setIsOnline] = useState(true);
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        {/* Top Section - Profile Text */}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* VelocIT Title */}
+        <Text style={styles.pageTitle}>VelocIT</Text>
+
+        {/* Top Section - Profile Text with Rounded Corners */}
         <View style={styles.profileSection}>
           <Text style={styles.name}>Danny Devito</Text>
           <Text style={styles.title}>Principle Talent Acquisition</Text>
@@ -28,7 +29,7 @@ export default function HomeScreen() {
             </View>
           ))}
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -36,19 +37,27 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
   },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
+  scrollContainer: {
+    paddingBottom: 16, // Ensures that the content can scroll beyond the last item
+  },
+  pageTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 44, // Pushes the title 44px from the top
+    marginBottom: 16, // Space between title and profile section
+    color: '#fff',
   },
   profileSection: {
     alignItems: 'center',
     paddingVertical: 20,
-    backgroundColor: '#8E24AA',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    backgroundColor: '#8E24AA', // Purple color
+    borderRadius: 20, // Rounded corners on both the top and bottom
     paddingTop: 40, // Added padding for devices with a notch
+    marginHorizontal: 16,
+    marginBottom: 16,
   },
   name: {
     fontSize: 24,
