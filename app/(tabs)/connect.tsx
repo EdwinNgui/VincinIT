@@ -3,17 +3,18 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
+import { getAuth } from 'firebase/auth';
 
 export default function TabTwoScreen() {
   const [isOnline, setIsOnline] = useState(true);
-
+  
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         {/* Top Section - Profile Text */}
         <View style={styles.profileSection}>
-          <Text style={styles.name}>Danny Devito</Text>
-          <Text style={styles.title}>Principle Talent Acquisition</Text>
+          <Text style={styles.name}>{getAuth().currentUser?.email}</Text>
+          <Text style={styles.title}>{getAuth().currentUser?.displayName}</Text>
         </View>
 
         {/* Company Cards in the middle */}
