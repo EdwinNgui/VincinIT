@@ -13,11 +13,18 @@
       "backgroundColor": "#ffffff"
     },
     "extra": {
-      "nearbyApikey":"AIzaSyC_gFI0z52xCw69ACbPfKWXOoZXUL-7MSs",
-      "firebaseApikey":"AIzaSyCCGMBC_nSw1oTO33If4rCAFS8Z54yrTMA"
+      "nearbyApikey": "AIzaSyC_gFI0z52xCw69ACbPfKWXOoZXUL-7MSs",
+      "firebaseApikey": "AIzaSyCCGMBC_nSw1oTO33If4rCAFS8Z54yrTMA",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "65f41399-9383-478a-acd4-81f52dab27fa"
+      }
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.fiorittoev.VincinIT"
     },
     "android": {
       "adaptiveIcon": {
