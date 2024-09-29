@@ -1,17 +1,30 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View, Text, TouchableOpacity,Switch, SafeAreaView } from 'react-native';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedView } from '@/components/ThemedView';
+import { ScrollView, StyleSheet, View, Text, TouchableOpacity, Switch, SafeAreaView } from 'react-native';
 import { getAuth } from 'firebase/auth';
+import { EnableConnections, DisableConnections } from '@/components/ToggleOnline'; // Adjust import path accordingly
 
 export default function HomeScreen() {
-  const [isOnline, setIsOnline] = useState(true);
+  const [isOnline, setIsOnline] = useState(false);
+  const [connectionState, setConnectionState] = useState<any>({});
 
-  const toggleOnlineStatus = () => {
-    setIsOnline((prevState) => !prevState);
+  const toggleOnlineStatus = async () => {
+    setIsOnline(!isOnline);
+
+    if (!isOnline) {
+      // Enable online status
+      const connection = await EnableConnections(getAuth().currentUser?.email);
+      setConnectionState(connection);
+    } else {
+      // Disable online status
+      const { disconnect, unsubscribe, unpublish } = connectionState;
+      await DisableConnections(disconnect, unsubscribe, unpublish, () => {
+        console.log('Listener removed');
+      });
+      setConnectionState({});
+    }
   };
-  
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -44,8 +57,9 @@ export default function HomeScreen() {
             value={isOnline} 
             onValueChange={toggleOnlineStatus} 
             trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isOnline ? "#f5dd4b" : "#f4f3f4"}            />
-            <Text style={styles.statusText}>{isOnline ? "Online" : "Offline"}</Text>
+            thumbColor={isOnline ? "#f5dd4b" : "#f4f3f4"}
+          />
+          <Text style={styles.statusText}>{isOnline ? "Online" : "Offline"}</Text>
         </View>
         
       </ScrollView>

@@ -1,52 +1,38 @@
 import React, { useMemo, useEffect } from 'react';
-import {
-    connect,
-    publish,
-    subscribe,
-    checkBluetoothPermission,
-    checkBluetoothAvailability,
-    useNearbyErrorCallback,
-    addOnErrorListener,
-    disconnect,
-    unsubscribe,
-    unpublish,
-} from 'react-native-google-nearby-messages';
+import * as Location from 'expo-location';
 import Constants from 'expo-constants';
 
-const EnableConnections = async (firebaseUsername:any) => {
+const EnableConnections = async (firebaseUsername: any) => {
+  // Request location permission
+  const { status } = await Location.requestForegroundPermissionsAsync();
+  if (status !== 'granted') {
+    console.error('Location permission not granted');
+    return;
+  }
 
-    const hasPermission = await checkBluetoothPermission();
-    if (!hasPermission) {
-        console.error('Bluetooth permission not granted');
-        return;
-    }
+  // Check if location services are enabled
+  const isLocationEnabled = await Location.hasServicesEnabledAsync();
+  if (!isLocationEnabled) {
+    console.error('Location services are not enabled');
+    return;
+  }
 
-    const isBluetoothAvailable = await checkBluetoothAvailability();
-    if (!isBluetoothAvailable) {
-        console.error('Bluetooth not available');
-        return;
-    }
+  // Get the user's current location
+  const location = await Location.getCurrentPositionAsync({});
+  console.log(`Current location: ${location.coords.latitude}, ${location.coords.longitude}`);
 
-    const disconnect = await connect({ apiKey: Constants?.expoConfig?.extra?.nearbyApikey });
-    const unpublish = await publish('hello !');
+  // You can add your custom logic here, e.g., publish location or connect to a server
 
-    const unsubscribe = await subscribe(
-        (m) => {
-            console.log(`New message found: ${m}`);
-        },
-        (m) => {
-            console.log(`Message lost: ${m}`);
-        }
-    );
-
-    return { disconnect, unsubscribe, unpublish};
+  return {
+    // No disconnect, unpublish, or unsubscribe needed for location
+    location, 
+  };
 };
 
-const DisableConnections = async (disconnect:any, unsubscribe:any, unpublish:any, removeListener:any) => {
-    if (unpublish) await unpublish();
-    if (unsubscribe) await unsubscribe();
-    if (disconnect) await disconnect();
-    if (removeListener) removeListener(); // Call the listener removal
+const DisableConnections = async (disconnect: any, unsubscribe: any, unpublish: any, removeListener: any) => {
+  // No unpublish or unsubscribe needed for location
+  if (disconnect) await disconnect();
+  if (removeListener) removeListener(); // Call the listener removal
 };
 
 export { EnableConnections, DisableConnections };
