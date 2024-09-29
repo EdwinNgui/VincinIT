@@ -1,11 +1,13 @@
 // UserProfileScreen.jsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Platform, ScrollView, View, Image } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import groq from '../../groqConfig'; // Adjust the import path based on your project structure
 
 export default function UserProfileScreen() {
+  const [aiDescription, setAiDescription] = useState(''); // State for AI-generated description
+
   useEffect(() => {
     // Call the main function when the component loads
     main();
@@ -14,8 +16,8 @@ export default function UserProfileScreen() {
   async function main() {
     try {
       const chatCompletion = await getGroqChatCompletion();
-      // Print the completion returned by the LLM.
-      console.log(chatCompletion.choices[0]?.message?.content || '');
+      // Set the AI description in state
+      setAiDescription(chatCompletion.choices[0]?.message?.content || ''); 
     } catch (error) {
       console.error('Error fetching Groq response:', error);
     }
@@ -26,7 +28,7 @@ export default function UserProfileScreen() {
       messages: [
         {
           role: 'user',
-          content: 'Explain the importance of fast language models',
+          content: 'Give a description of this user based on their interests: Robotics, Money, Bread, Dough. Limit to 2-3 Sentences.',
         },
       ],
       model: "llama-3.1-70b-versatile",
@@ -82,6 +84,18 @@ export default function UserProfileScreen() {
           <ThemedText style={styles.interestItem}>Bread</ThemedText>
           <ThemedText style={styles.interestItem}>Dough</ThemedText>
         </View>
+      </ThemedView>
+
+      {/* AI Gen Card Block */}
+      <ThemedView style={styles.detailsCard}>
+        <ThemedText type="subtitle" style={styles.darkText}>
+          AI Profile Summary
+        </ThemedText>
+        
+        {/* Display the AI-generated description here */}
+        <ThemedText style={styles.darkText}>
+          {aiDescription || 'Fetching AI-generated description...'}
+        </ThemedText>
       </ThemedView>
     </ScrollView>
   );
